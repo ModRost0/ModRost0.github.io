@@ -135,17 +135,12 @@ app.get('/api/chat/older', isLoggedIn, async (req, res) => {
 
 // WebSocket Server Setup
 const server = http.createServer(app);
-const wss = new WebSocketServer({ server });
+const ws = new WebSocketServer({ server });
 
 ws.on('connection', (ws, req) => {
-  const origin = req.headers.origin;
-  if (origin !== 'https://chat-client-hazel.vercel.app') {
-    ws.close();
-    return;
-  }
   ws.on('message', (message) => {
     console.log('Received message:', message);
-    wss.clients.forEach((client) => {
+    ws.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(message);
       }
