@@ -50,10 +50,21 @@ const sessionConfig = {
 };
 
 // Middleware Setup
-const allowedOrigins = ['https://chat-client-hazel.vercel.app'];
+
+const allowedOrigins = ['https://chat-server-2vtbelu8c-theoradiles-projects.vercel.app/', 'chat-server-git-main-theoradiles-projects.vercel.app','chat-server-plum.vercel.app'];
+
 app.use(
-  cors()
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }
+  })
 );
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session(sessionConfig));
