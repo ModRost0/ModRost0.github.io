@@ -54,15 +54,7 @@ const sessionConfig = {
 const allowedOrigins = ['https://chat-client-theoradiles-projects.vercel.app/', 'https://chat-client-hazel.vercel.app/','https://chat-client-git-main-theoradiles-projects.vercel.app/'];
 
 app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        res.send({ success: false, message: 'Not allowed by CORS' });
-      }
-    }
-  })
+  cors()
 );
 
 app.use(bodyParser.json());
