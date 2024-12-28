@@ -52,16 +52,7 @@ const sessionConfig = {
 // Middleware Setup
 const allowedOrigins = ['https://chat-client-hazel.vercel.app'];
 app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true, // Enable cookies and authorization headers
-  })
+  cors()
 );
 app.use(bodyParser.json());
 app.use(cookieParser());

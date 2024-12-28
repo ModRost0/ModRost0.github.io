@@ -36,38 +36,58 @@ function App() {
   }, []);
 
   const connectWebSocket = () => {
-    if (ws.current) ws.current.close();
+    if (ws.current) ws.current.close(); // Close existing WebSocket before creating a new one
+  
     ws.current = new WebSocket('wss://chat-server-plum.vercel.app/');
-
-    ws.current.onopen = () => console.log('WebSocket connected');
-    ws.current.onmessage = (event) => {
-      try {
-        if (event.data instanceof Blob) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            try {
-              const newMessage = JSON.parse(reader.result);
-              setAllMessages((prev) => [...prev, newMessage]);
-            } catch (error) {
-              console.error('Error parsing Blob data:', error);
-            }
-          };
-          reader.readAsText(event.data);
-        } else if (typeof event.data === 'string') {
-          const newMessage = JSON.parse(event.data);
-          setAllMessages((prev) => [...prev, newMessage]);
-        } else {
-          console.warn('Received unexpected data type:', event.data);
-        }
-      } catch (error) {
-        console.error('WebSocket message error:', error);
-      }
+  
+    ws.current.onopen = () => {
+      console.log('WebSocket connected');
     };
-    ws.current.onclose = () => {
-      console.log('WebSocket disconnected');
-      setTimeout(connectWebSocket, 5000); // Retry after 5 seconds
+  
+    ws.current.onmessage = (event) => {
+      handleWebSocketMessage(event);
+    };
+  
+    ws.current.onclose = (event) => {
+      console.log('WebSocket disconnected', event.reason || 'No reason provided');
+      retryConnection(); // Handle reconnection logic
+    };
+  
+    ws.current.onerror = (error) => {
+      console.error('WebSocket error:', error);
     };
   };
+  
+  const handleWebSocketMessage = (event) => {
+    try {
+      if (event.data instanceof Blob) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          try {
+            const newMessage = JSON.parse(reader.result);
+            setAllMessages((prev) => [...prev, newMessage]);
+          } catch (error) {
+            console.error('Error parsing Blob data:', error);
+          }
+        };
+        reader.readAsText(event.data);
+      } else if (typeof event.data === 'string') {
+        const newMessage = JSON.parse(event.data);
+        setAllMessages((prev) => [...prev, newMessage]);
+      } else {
+        console.warn('Received unexpected data type:', event.data);
+      }
+    } catch (error) {
+      console.error('WebSocket message error:', error, event.data);
+    }
+  };
+  
+  const retryConnection = () => {
+    const retryDelay = 5000; // Adjust as needed, or implement exponential backoff
+    console.log(`Retrying WebSocket connection in ${retryDelay / 1000} seconds...`);
+    setTimeout(connectWebSocket, retryDelay);
+  };
+  
 
   useEffect(() => {
     connectWebSocket();
