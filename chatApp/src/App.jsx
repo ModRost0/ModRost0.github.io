@@ -37,7 +37,7 @@ function App() {
 
   const connectWebSocket = () => {
     if (ws.current) ws.current.close();
-    ws.current = new WebSocket('ws://localhost:3000');
+    ws.current = new WebSocket('ws://chat-server-plum.vercel.app/');
 
     ws.current.onopen = () => console.log('WebSocket connected');
     ws.current.onmessage = (event) => {
