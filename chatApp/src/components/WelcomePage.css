@@ -1,0 +1,99 @@
+/* WelcomePage.css */
+@font-face {
+  font-family: 'TimelessBold';
+  src: url('/fonts/Timeless-Bold.ttf') format('truetype');
+}
+
+/* General Reset */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'TimelessBold', sans-serif;
+  color: #ffffff;
+  background-color: #000; /* Fallback background color */
+  overflow: auto; /* Allow scrolling */
+}
+
+.welcome-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh; /* Ensure it takes at least the full viewport height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center items horizontally */
+  align-items: center; /* Center items vertically */
+  overflow: auto; /* Allow scrolling */
+}
+
+/* Video Background */
+.background-video {
+  position: fixed; /* Fixed position to cover the entire viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Scales proportionally to cover the entire area */
+  z-index: -1; /* Ensure the video is behind the content */
+}
+
+/* Main Content */
+.content {
+  position: relative;
+  z-index: 1; /* Keep content above the video */
+  text-align: center;
+  max-width: 800px; /* Restrict width for better readability */
+  margin: 0 auto;
+  color: #ffffff;
+}
+
+.text-container {
+  max-width: 700px;
+  padding: 0; /* Remove any default padding */
+  margin: 0 auto; /* Center the text container */
+}
+
+.welcome-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.welcome-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.welcome-description {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  color: #d9ffe6;
+}
+
+.welcome-back-message {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* Button */
+.action-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  background-color: #003300;
+  color: #00ff66;
+  border: none;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background-color: #00cc66;
+}
+
+body {
+  font-size: xx-small;
+}
