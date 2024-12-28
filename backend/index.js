@@ -8,7 +8,6 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const mongoStore = require('connect-mongo');
-const cors = require('cors');
 const bodyParser = require('body-parser');
 const flash = require('connect-flash');
 const { WebSocketServer } = require('ws');
@@ -55,7 +54,7 @@ const cors = require('cors');
 
 // Enable CORS for all origins
 const corsOptions = {
-  origin: '*', // Allows all origins
+  origin: 'https://chat-client-hazel.vercel.app/', // Allows all origins
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // List of allowed HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // List of allowed headers
   credentials: true // Allow credentials (cookies, Authorization headers, etc.)
