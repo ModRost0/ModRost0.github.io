@@ -56,6 +56,7 @@ app.use(cors({
 }));
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(session(sessionConfig));
 app.use(passport.initialize());
