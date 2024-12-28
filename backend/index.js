@@ -51,11 +51,17 @@ const sessionConfig = {
 
 // Middleware Setup
 
-const allowedOrigins = ['https://chat-client-theoradiles-projects.vercel.app/', 'https://chat-client-hazel.vercel.app/','https://chat-client-git-main-theoradiles-projects.vercel.app/'];
+const cors = require('cors');
 
-app.use(
-  cors()
-);
+// Enable CORS for all origins
+const corsOptions = {
+  origin: '*', // Allows all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // List of allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // List of allowed headers
+  credentials: true // Allow credentials (cookies, Authorization headers, etc.)
+};
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 app.use(cookieParser());
