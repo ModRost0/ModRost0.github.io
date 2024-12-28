@@ -51,7 +51,12 @@ const sessionConfig = {
 // Middleware Setup
 
 const cors = require('cors');
-
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Allows all origins
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE'); // Allow all methods
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Allow necessary headers
+  next();
+});
 
 
 app.use(cors());
