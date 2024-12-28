@@ -20,7 +20,7 @@ function App() {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/chat', {
+        const response = await fetch('https://chat-server-plum.vercel.app/api/chat', {
           method: 'GET',
           credentials: 'include',
         });
@@ -85,7 +85,7 @@ function App() {
       try {
         const skip = allMessages.length;
         const limit = 20;
-        const response = await fetch(`http://localhost:3000/api/chat/older?skip=${skip}&limit=${limit}`, {
+        const response = await fetch(`https://chat-server-plum.vercel.app/api/chat/older?skip=${skip}&limit=${limit}`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -122,7 +122,7 @@ function App() {
 
     try {
       ws.current.send(JSON.stringify(messageData));
-      await fetch('http://localhost:3000/api/chat', {
+      await fetch('https://chat-server-plum.vercel.app/api/chat', {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },

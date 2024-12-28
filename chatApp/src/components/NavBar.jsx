@@ -9,7 +9,7 @@ import { UserContext } from '../context/UserContext';
 const Navbar = () => {
   let user = useContext(UserContext);
   const checkAuth = async () => {
-      const response = await fetch('http://localhost:3000/api/auth/validate-session', {
+      const response = await fetch('https://chat-server-plum.vercel.app/api/auth/validate-session', {
         method: 'GET',
         credentials: 'include', // Ensures cookies are sent with the request
       });
