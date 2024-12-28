@@ -52,15 +52,9 @@ const sessionConfig = {
 
 const cors = require('cors');
 
-// Enable CORS for all origins
-const corsOptions = {
-  origin: 'https://chat-client-hazel.vercel.app/', // Allows all origins
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // List of allowed HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // List of allowed headers
-  credentials: true // Allow credentials (cookies, Authorization headers, etc.)
-};
 
-app.use(cors(corsOptions));
+
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(cookieParser());
