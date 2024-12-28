@@ -49,9 +49,11 @@ const sessionConfig = {
 };
 
 // Middleware Setup
-
 const cors = require('cors');
-app.use(cors());
+app.use(cors({
+  origin: 'https://chat-client-hazel.vercel.app',  // Allow only your frontend URL
+  credentials: true  // Allow credentials (cookies, session)
+}));
 
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -123,13 +125,28 @@ app.get('/api/chat/older', isLoggedIn, async (req, res) => {
   }
 });
 
-// WebSocket Server Setup
+// WebSocket Server Setup with CORS Handling
 const server = http.createServer(app);
-const ws = new WebSocketServer({ server });
+const ws = new WebSocketServer({ 
+  server, 
+  verifyClient: (info, done) => {
+    const origin = info.origin;  // The origin of the incoming WebSocket connection
+    if (origin === 'https://chat-client-hazel.vercel.app') {
+      done(true);  // Accept the connection if the origin matches
+    } else {
+      console.log('Blocked WebSocket connection from:', origin);
+      done(false, 403, 'Forbidden');  // Reject the connection if the origin doesn't match
+    }
+  }
+});
 
-ws.on('connection', (ws, req) => {
+// WebSocket Message Handling
+ws.on('connection', (ws) => {
+  console.log('New WebSocket connection established');
+
   ws.on('message', (message) => {
     console.log('Received message:', message);
+    // Broadcast the message to all connected clients
     ws.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         client.send(message);
