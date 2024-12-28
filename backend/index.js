@@ -51,7 +51,7 @@ const sessionConfig = {
 
 // Middleware Setup
 app.use(cors({
-  origin: 'https://chat-client-hazel.vercel.app/',
+  origin: 'https://chat-client-hazel.vercel.app',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
   credentials: true,
