@@ -50,7 +50,19 @@ const sessionConfig = {
 };
 
 // Middleware Setup
-app.use(cors());
+const allowedOrigins = ['https://chat-client-hazel.vercel.app'];
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true, // Enable cookies and authorization headers
+  })
+);
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(session(sessionConfig));
@@ -125,9 +137,12 @@ app.get('/api/chat/older', isLoggedIn, async (req, res) => {
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
-wss.on('connection', (ws) => {
-  console.log('WebSocket connection established');
-
+ws.on('connection', (ws, req) => {
+  const origin = req.headers.origin;
+  if (origin !== 'https://chat-client-hazel.vercel.app') {
+    ws.close();
+    return;
+  }
   ws.on('message', (message) => {
     console.log('Received message:', message);
     wss.clients.forEach((client) => {
