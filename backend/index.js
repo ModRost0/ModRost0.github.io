@@ -8,7 +8,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const mongoStore = require('connect-mongo');
-const cors = require('cors');
+const cors = requirehttps://chat-server-plum.vercel.app/('cors');
 const bodyParser = require('body-parser');
 const flash = require('connect-flash');
 const { WebSocketServer } = require('ws');
@@ -51,7 +51,7 @@ const sessionConfig = {
 
 // Middleware Setup
 app.use(cors({
-  origin: 'https://chat-server-plum.vercel.app/',
+  origin: 'https://chat-client-hazel.vercel.app/',
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
   credentials: true,
