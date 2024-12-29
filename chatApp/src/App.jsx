@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Drawer, AppBar, Toolbar, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { UserContext } from './context/UserContext';
-import dayjs from 'dayjs';
 import './App.css';
 
 function App() {
@@ -26,10 +25,13 @@ function App() {
         });
         if (response.ok) {
           const data = await response.json();
-          setAllMessages((prev) => [...data.reverse(), ...prev]);
+          setAllMessages(data.reverse());
+          console.log('Fetched messages:', data);
+        } else {
+          console.error('Failed to fetch messages:', response.statusText);
         }
       } catch (error) {
-        console.error('Error fetching older messages:', error);
+        console.error('Error fetching messages:', error);
       } finally {
         setLoadingOlderMessages(false);
       }
@@ -59,6 +61,7 @@ function App() {
         const newMessage = JSON.parse(data);
         setAllMessages((prev) => [...prev, newMessage]);
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        console.log('Received WebSocket message:', newMessage);
       } catch (error) {
         console.error('WebSocket message error:', error);
       }
@@ -84,14 +87,16 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content: form }),
+        body: JSON.stringify({ sender: user?.username || 'anonymous', message: form,date: new Date().toISOString() }),
       });
       const data = await response.json();
       if (response.ok) {
         setForm('');
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        console.log('Message sent:', data);
       } else {
         setErrorMessage(data.error);
+        console.error('Failed to send message:', data.error);
       }
     } catch (error) {
       setErrorMessage('Failed to send message');
@@ -103,26 +108,23 @@ function App() {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => setDrawerOpen(true)}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Chat App
-          </Typography>
-        </Toolbar>
-      </AppBar>
       <Drawer anchor="left" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         {/* Drawer content */}
       </Drawer>
       <Box sx={{ flexGrow: 1, overflow: 'auto', p: 2 }} ref={messagesContainerRef}>
         {loadingOlderMessages && <CircularProgress />}
-        <ul>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           {allMessages.map((message, index) => (
-            <li key={index}>{message.content}</li>
+            <Box key={index} className="message">
+              <Typography variant="body1" className="message-sender">
+                {message.sender}:
+              </Typography>
+              <Typography variant="body2" className="message-content">
+                {message.message}
+              </Typography>
+            </Box>
           ))}
-        </ul>
+        </Box>
         <div ref={messageEndRef} />
       </Box>
       <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', p: 2 }}>

@@ -97,7 +97,7 @@ app.get(
   "/api/chat",
   isLoggedIn,
   catchAsync(async (req, res) => {
-    const messages = await Message.find({}).sort({ createdAt: -1 }).limit(20);
+    const messages = await Message.find({}).limit(20);
     res.json(messages);
   })
 );
