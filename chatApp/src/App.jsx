@@ -26,7 +26,7 @@ useEffect(() => {
           console.log('response',data)
           setUser(data.user); // Update user state
         } else {
-          setUser(null);
+          console.log('response',response)
         }}
         checkAuth();
       },[user])

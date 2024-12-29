@@ -45,7 +45,7 @@ const sessionConfig = {
     secure: true, // Use secure cookies in production// Prevent client-side access to cookies
     sameSite: 'none', // Required for cross-origin cookies
     maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
-  },
+    domain: 'https://chat-client-hazel.vercel.app'},
 };
 app.use(session(sessionConfig));
 store.on('create', (sessionId) => {
