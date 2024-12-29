@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TextField, Button, Box, Typography } from '@mui/material';
-
+import { UserContext } from '../context/UserContext';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-
+ const {setUser} = useContext(UserContext);
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -21,6 +21,8 @@ const Login = () => {
       });
       const data = await response.json();
       if (response.ok) {
+        console.log('Login successful:', data);
+        setUser(data.user);
         navigate('/home');
       } else {
         setErrorMessage(data.message);

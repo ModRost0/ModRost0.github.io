@@ -69,7 +69,7 @@ function App() {
 
     ws.current.onclose = () => {
       console.log('WebSocket disconnected');
-      setTimeout(connectWebSocket, 5000); // Retry after 5 seconds
+    // Retry after 5 seconds
     };
 
     ws.current.onerror = (error) => {
@@ -92,6 +92,7 @@ function App() {
       const data = await response.json();
       if (response.ok) {
         setForm('');
+        console.log(user)
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         console.log('Message sent:', data);
       } else {
