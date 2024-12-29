@@ -1,76 +1,68 @@
-import React, { useContext, useState } from 'react';
-import { Box, Typography, TextField, Button } from '@mui/material';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Login.css';
-import { UserContext } from '../context/UserContext';
-function Login() {
-  const [formData, setFormData] = useState({ username: '', password: '' });
+import { TextField, Button, Box, Typography } from '@mui/material';
+
+const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-let {setUser} = useContext(UserContext);
-  const handleSubmit = async (e) => {
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch('https://chat-server-plum.vercel.app/api/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+        credentials: 'include', // Ensure cookies are sent with the request
       });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
       const data = await response.json();
-      if (data.success) {
-        setUser(data.user)
+      if (response.ok) {
         navigate('/home');
       } else {
         setErrorMessage(data.message);
       }
     } catch (error) {
-      setErrorMessage('An error occurred during login.');
-      console.error('Error:', error);
+      setErrorMessage('Failed to login');
+      console.error('Error logging in:', error);
     }
   };
 
   return (
-    <Box className="login-container" sx={{ mt: 4 }}>
-      <Typography variant="h4" align="center" gutterBottom>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+      <Typography variant="h4" gutterBottom>
         Login
       </Typography>
-      <form onSubmit={handleSubmit} className="login-form">
+      <Box component="form" onSubmit={handleLogin} sx={{ width: '300px' }}>
         <TextField
           label="Username"
-          variant="outlined"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           fullWidth
           margin="normal"
-          value={formData.username}
-          onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-          className="login-input"
         />
         <TextField
           label="Password"
-          variant="outlined"
           type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           fullWidth
           margin="normal"
-          value={formData.password}
-          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-          className="login-input"
         />
+        <Button type="submit" variant="contained" color="primary" fullWidth>
+          Login
+        </Button>
         {errorMessage && (
-          <Typography color="error" align="center" className="error-message">
+          <Typography color="error" align="center" sx={{ marginTop: 2 }}>
             {errorMessage}
           </Typography>
         )}
-        <Button variant="contained" color="primary" fullWidth type="submit" className="login-button" sx={{ mt: 2 }}>
-          Login
-        </Button>
-      </form>
+      </Box>
     </Box>
   );
-}
+};
 
 export default Login;
