@@ -30,8 +30,8 @@ mongoose
 // Session Configuration
 const store = mongoStore.create({
   mongoUrl: dbUrl,
-  ttl: 14 * 24 * 60 * 60,
-  touchAfter: 24 * 60 * 60,
+  ttl: 14 * 24 * 60 * 60, // 14 days
+  touchAfter: 24 * 60 * 60, // Update session every 24 hours
   crypto: { secret: process.env.SESSION_SECRET },
 });
 
@@ -42,12 +42,14 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: true, // Use secure cookies in production// Prevent client-side access to cookies
-    sameSite: 'none', // Required for cross-origin cookies
+    secure: true, // Use secure cookies in production (HTTPS)
+    sameSite: 'None', // Required for cross-origin cookies
     maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
-    domain: 'https://chat-client-hazel.vercel.app'},
+    // No need to set domain unless using subdomains
+  },
 };
 app.use(session(sessionConfig));
+
 store.on('create', (sessionId) => {
   console.log('Session created:', sessionId);
 });
@@ -92,7 +94,6 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-
 // Middleware to Add User Info to Response Locals
 app.use((req, res, next) => {
   res.locals.user = req.user;
@@ -100,13 +101,12 @@ app.use((req, res, next) => {
   next();
 });
 
-// Authentication Middleware
-
-
 // Async Error Wrapper
 const catchAsync = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
+
+// Authentication Middleware
 const isLoggedIn = (req, res, next) => {
   console.log('Session:', req.session);
   console.log('User:', req.user);
@@ -116,6 +116,7 @@ const isLoggedIn = (req, res, next) => {
     res.status(401).json({ loggedIn: false, message: 'Unauthorized' });
   }
 };
+
 // API Routes
 app.use("/api", userRouter);
 
@@ -150,10 +151,7 @@ app.get(
   isLoggedIn,
   catchAsync(async (req, res) => {
     const { skip, limit } = req.query;
-    const messages = await Message.find({})
-      .sort({ createdAt: -1 })
-      .skip(parseInt(skip))
-      .limit(parseInt(limit));
+    const messages = await Message.find({}).sort({ createdAt: -1 }).skip(parseInt(skip)).limit(parseInt(limit));
     res.json(messages);
   })
 );
@@ -164,7 +162,7 @@ const wsServer = new WebSocketServer({
   server,
   verifyClient: (info, done) => {
     const origin = info.origin;
-    if (["https://chat-client-hazel.vercel.app",'http://localhost:5173'].includes(origin)) {
+    if (["https://chat-client-hazel.vercel.app", 'http://localhost:5173'].includes(origin)) {
       done(true);
     } else {
       console.log("Blocked WebSocket connection from:", origin);
@@ -196,3 +194,4 @@ wsServer.on("connection", (ws) => {
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
