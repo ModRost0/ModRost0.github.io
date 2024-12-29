@@ -51,9 +51,12 @@ const sessionConfig = {
 // Middleware Setup
 const cors = require('cors');
 app.use(cors({
-  origin: ['https://chat-client-hazel.vercel.app','http://localhost:5173'],  // Allow only your frontend URL
-  credentials: true  // Allow credentials (cookies, session)
+  origin: ['https://chat-client-hazel.vercel.app', 'http://localhost:5173'], // Frontend URLs allowed
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // HTTP methods allowed
+  allowedHeaders: ['Content-Type', 'Authorization'], // Headers allowed
+  credentials: true // Allow cookies and credentials
 }));
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
