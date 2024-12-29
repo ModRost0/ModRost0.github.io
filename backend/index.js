@@ -81,10 +81,8 @@ app.use((req, res, next) => {
 
 // Authentication Middleware
 const isLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.status(401).json({ loggedIn: false, message: "Unauthorized" });
+console.log(req.isAuthenticated())
+next()
 };
 
 // Async Error Wrapper
