@@ -11,7 +11,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://chat-server-plum.vercel.app/api/login', {
+      const response = await fetch('https://modrost0-github-io.onrender.com/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

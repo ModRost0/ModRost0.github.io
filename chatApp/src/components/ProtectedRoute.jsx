@@ -10,7 +10,7 @@ const ProtectedRoute = ({ children }) => {
     const checkAuth = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch('https://chat-server-plum.vercel.app/api/auth/validate-session', {
+        const response = await fetch('https://modrost0-github-io.onrender.com/api/auth/validate-session', {
           method: 'GET',
           credentials: 'include', // Ensures cookies are sent with the request
         });

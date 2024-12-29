@@ -20,7 +20,7 @@ function App() {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch('https://chat-server-plum.vercel.app/api/chat', {
+        const response = await fetch('https://modrost0-github-io.onrender.com/api/chat', {
           method: 'GET',
           credentials: 'include',
         });
@@ -47,7 +47,7 @@ function App() {
 
   const connectWebSocket = () => {
     if (ws.current) ws.current.close();
-    ws.current = new WebSocket('wss://chat-server-plum.vercel.app');
+    ws.current = new WebSocket('wss://modrost0-github-io.onrender.com');
 
     ws.current.onopen = () => {
       console.log('WebSocket connected');
@@ -78,7 +78,7 @@ function App() {
     e.preventDefault();
     setIsSending(true);
     try {
-      const response = await fetch('https://chat-server-plum.vercel.app/api/chat', {
+      const response = await fetch('https://modrost0-github-io.onrender.com/api/chat', {
         method: 'POST',
         credentials: 'include',
         headers: {
