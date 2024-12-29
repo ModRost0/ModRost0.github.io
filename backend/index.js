@@ -42,8 +42,7 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-    httpOnly: true, // Prevent client-side access to cookies
+    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production// Prevent client-side access to cookies
     sameSite: 'none', // Required for cross-origin cookies
     maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
   },
@@ -141,7 +140,7 @@ const wsServer = new WebSocketServer({
   server,
   verifyClient: (info, done) => {
     const origin = info.origin;
-    if (["https://chat-client-hazel.vercel.app"].includes(origin)) {
+    if (["https://chat-client-hazel.vercel.app",'http://localhost:5173'].includes(origin)) {
       done(true);
     } else {
       console.log("Blocked WebSocket connection from:", origin);
