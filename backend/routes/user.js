@@ -25,6 +25,7 @@ router.route('/register')
 router.route('/login')
   .post((req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
+      console.log('login', user);
       if (err) {
         return res.status(500).json({ success: false, message: err.message });
       }

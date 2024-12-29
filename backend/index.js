@@ -37,16 +37,18 @@ const store = mongoStore.create({
 
 const sessionConfig = {
   store,
-  name: "session-real",
+  name: 'session-real', // Custom session cookie name
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 14 * 24 * 60 * 60 * 1000,
-    sameSite: "none",
+    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+    httpOnly: true, // Prevent client-side access to cookies
+    sameSite: 'none', // Required for cross-origin cookies
+    maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
   },
 };
+app.use(session(sessionConfig));
 
 // Middleware Setup
 const cors = require("cors");
