@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { UserContext } from '../context/UserContext';
 const Navbar = () => {
-  let user = useContext(UserContext);
+  let {user} = useContext(UserContext);
   const checkAuth = async () => {
       const response = await fetch('https://modrost0-github-io.onrender.com/api/auth/validate-session', {
         method: 'GET',

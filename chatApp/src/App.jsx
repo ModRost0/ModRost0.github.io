@@ -11,10 +11,25 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
   const [loadingOlderMessages, setLoadingOlderMessages] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { user } = useContext(UserContext);
+  const { user,setUser } = useContext(UserContext);
   const ws = useRef(null);
   const messageEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
+useEffect(() => {
+  let checkAuth = async () => {
+        const response = await fetch('https://modrost0-github-io.onrender.com/api/auth/validate-session', {
+          method: 'GET',
+          credentials: 'include', // Ensures cookies are sent with the request
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log('response',data)
+          setUser(data.user); // Update user state
+        } else {
+          setUser(null);
+        }}
+        checkAuth();
+      },[user])
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -33,7 +48,7 @@ function App() {
       } catch (error) {
         console.error('Error fetching messages:', error);
       } finally {
-        setLoadingOlderMessages(false);
+        setLoadingOlderMessages(false); 
       }
     };
 

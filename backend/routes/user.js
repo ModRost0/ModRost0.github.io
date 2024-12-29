@@ -36,8 +36,10 @@ router.route('/login')
         if (err) {
           return res.status(500).json({ success: false, message: err.message });
         }
+        console.log('Session after login:', req.session);
         res.json({ success: true, user });
       });
+      
     })(req, res, next);
   });
 

@@ -3,7 +3,7 @@ import { Container, Box } from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
 import NavBar from './components/NavBar';
 import WelcomePage from './components/WelcomePage';
-import Login from './auth/Login';
+import Login from './auth/Login.jsx';
 import Register from './auth/Register';
 import App from './App';
 import ProtectedRoute from './components/ProtectedRoute';

@@ -42,12 +42,19 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production// Prevent client-side access to cookies
+    secure: true, // Use secure cookies in production// Prevent client-side access to cookies
     sameSite: 'none', // Required for cross-origin cookies
     maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
   },
 };
 app.use(session(sessionConfig));
+store.on('create', (sessionId) => {
+  console.log('Session created:', sessionId);
+});
+
+store.on('update', (sessionId) => {
+  console.log('Session updated:', sessionId);
+});
 
 // Middleware Setup
 const cors = require("cors");
@@ -69,8 +76,20 @@ app.use(passport.session());
 app.use(flash());
 
 passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser((user, done) => {
+  console.log('Serializing user:', user);
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  console.log('Deserializing user with ID:', id);
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err, null);
+  }
+});
 
 // Middleware to Add User Info to Response Locals
 app.use((req, res, next) => {
@@ -80,16 +99,21 @@ app.use((req, res, next) => {
 });
 
 // Authentication Middleware
-const isLoggedIn = (req, res, next) => {
-console.log(req.isAuthenticated())
-next()
-};
+
 
 // Async Error Wrapper
 const catchAsync = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);
 };
-
+const isLoggedIn = (req, res, next) => {
+  console.log('Session:', req.session);
+  console.log('User:', req.user);
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.status(401).json({ loggedIn: false, message: 'Unauthorized' });
+  }
+};
 // API Routes
 app.use("/api", userRouter);
 
@@ -97,7 +121,7 @@ app.get(
   "/api/chat",
   isLoggedIn,
   catchAsync(async (req, res) => {
-    const messages = await Message.find({}).sort({ createdAt: -1 }).limit(20);
+    const messages = await Message.find({}).sort({ date: -1 }).limit(20);
     res.json(messages);
   })
 );
