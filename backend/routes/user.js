@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport');
-const User = require('../model/user.js');
+const User = require('../model/user');
 const router = express.Router();
 
 const isLoggedIn = (req, res, next) => {
@@ -14,12 +14,11 @@ const isLoggedIn = (req, res, next) => {
 router.route('/register')
   .post(async (req, res) => {
     try {
-      const { password } = req.body;
-      const newUser = new User(req.body);
-      const registeredUser = await User.register(newUser, password);
-      res.json({ success: true, user: registeredUser });
-    } catch (err) {
-      res.status(500).json({ success: false, message: err.message });
+      const user = new User({ username: req.body.username });
+      await User.register(user, req.body.password);
+      res.status(201).json({ success: true, user });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
     }
   });
 
