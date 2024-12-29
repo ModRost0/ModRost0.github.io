@@ -70,7 +70,6 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(session(sessionConfig));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -82,14 +81,17 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  console.log('Deserializing user with ID:', id);
   try {
+    console.log('Deserializing user with ID:', id);
     const user = await User.findById(id);
+    console.log('User found during deserialization:', user);
     done(null, user);
-  } catch (err) {
-    done(err, null);
+  } catch (error) {
+    console.error('Error during deserialization:', error);
+    done(error, null);
   }
 });
+
 
 // Middleware to Add User Info to Response Locals
 app.use((req, res, next) => {
