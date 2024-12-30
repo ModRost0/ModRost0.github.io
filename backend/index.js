@@ -82,8 +82,7 @@ passport.serializeUser((user, done) => {
     done(null, user.id);
 });
 
-passport.deserializeUser().then((id, done) => {console.log('Deserializing user:', id); User.findById(id, (err, user) => done(err, user));});
-
+passport.deserializeUser((id, done) => {console.log('Deserializing user:', id);});
 // Middleware to Add User Info to Response Locals
 app.use((req, res, next) => {
     res.locals.user = req.user;
