@@ -5,7 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import { Link } from 'react-router-dom';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { UserContext } from '../context/UserContext';
+import { UserContext } from '../context/UserContext.jsx';
 const Navbar = () => {
   let {user} = useContext(UserContext);
   return (

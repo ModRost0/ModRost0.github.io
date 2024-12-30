@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { UserContext } from '../context/UserContext'; // Ensure you have a UserContext for global user state
+import { UserContext } from '../context/UserContext.jsx'; // Ensure you have a UserContext for global user state
 
 const ProtectedRoute = ({ children }) => {
   const { user, setUser, isLoading, setIsLoading } = useContext(UserContext);

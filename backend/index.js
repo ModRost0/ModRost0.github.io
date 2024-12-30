@@ -13,6 +13,7 @@ const flash = require("connect-flash");
 const { WebSocketServer } = require("ws");
 const http = require("http");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 const User = require("./model/user");
 const Message = require("./model/message");
 const userRouter = require("./routes/user");
@@ -41,8 +42,8 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === "production", // Use secure cookies in production (HTTPS)
-    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Required for cross-origin cookies
+    secure: process.env.NODE_ENV === 'production', // Use secure cookies in production (HTTPS)
+    sameSite: 'None', // Required for cross-origin cookies
     maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
     // No need to set domain unless using subdomains
   },
@@ -58,14 +59,14 @@ store.on('update', (sessionId) => {
 });
 
 // Middleware Setup
-const cors = require("cors");
 app.use(
   cors({
     origin: ["https://chat-client-hazel.vercel.app", "http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-}));
+    credentials: true, // Allow cookies and credentials
+  })
+);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -188,4 +189,3 @@ wsServer.on("connection", (ws) => {
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-

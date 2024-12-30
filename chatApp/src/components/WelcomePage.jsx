@@ -3,7 +3,7 @@ import { Box, Typography, Button } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useNavigate, Link } from 'react-router-dom';
 import './WelcomePage.css';
-import { UserContext } from '../context/UserContext';
+import { UserContext } from '../context/UserContext.jsx';
 
 function WelcomePage() {
   const { user } = useContext(UserContext);

@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-
+import config from '../config';
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -7,7 +7,7 @@ export const UserProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   return (
-    <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading }}>
+    <UserContext.Provider value={{ user, setUser, isLoading, baseUrl: config.BASE_URL, setIsLoading }}>
       {children}
     </UserContext.Provider>
   );

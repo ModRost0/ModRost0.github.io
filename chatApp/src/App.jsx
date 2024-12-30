@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Drawer, AppBar, Toolbar, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { UserContext } from './context/UserContext';
+import { UserContext } from './context/UserContext.jsx';
 import './App.css';
 
 function App() {
@@ -11,30 +11,32 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
   const [loadingOlderMessages, setLoadingOlderMessages] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { user,setUser } = useContext(UserContext);
+  const { user, setUser, baseUrl } = useContext(UserContext);
   const ws = useRef(null);
   const messageEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
-useEffect(() => {
-  let checkAuth = async () => {
-        const response = await fetch('https://modrost0-github-io.onrender.com/api/auth/validate-session', {
-          method: 'GET',
-          credentials: 'include', // Ensures cookies are sent with the request
-        });
-        if (response.ok) {
-          const data = await response.json();
-          console.log('response',data)
-          setUser(data.user); // Update user state
-        } else {
-          console.log('response',response)
-        }}
-        checkAuth();
-      },[])
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const response = await fetch(`${baseUrl}/auth/validate-session`, {
+        method: 'GET',
+        credentials: 'include', // Ensures cookies are sent with the request
+      });
+      if (response.ok) {
+        const data = await response.json();
+        console.log('response', data);
+        setUser(data.user); // Update user state
+      } else {
+        console.log('response', response);
+      }
+    };
+    checkAuth();
+  }, [baseUrl, setUser]);
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await fetch('https://modrost0-github-io.onrender.com/api/chat', {
+        const response = await fetch(`${baseUrl}/chat`, {
           method: 'GET',
           credentials: 'include',
         });
@@ -48,7 +50,7 @@ useEffect(() => {
       } catch (error) {
         console.error('Error fetching messages:', error);
       } finally {
-        setLoadingOlderMessages(false); 
+        setLoadingOlderMessages(false);
       }
     };
 
@@ -60,11 +62,11 @@ useEffect(() => {
         ws.current.close();
       }
     };
-  }, []);
+  }, [baseUrl]);
 
   const connectWebSocket = () => {
     if (ws.current) ws.current.close();
-    ws.current = new WebSocket('wss://modrost0-github-io.onrender.com');
+    ws.current = new WebSocket(`wss://modrost0-github-io.onrender.com`);
 
     ws.current.onopen = () => {
       console.log('WebSocket connected');
@@ -84,7 +86,7 @@ useEffect(() => {
 
     ws.current.onclose = () => {
       console.log('WebSocket disconnected');
-    // Retry after 5 seconds
+      setTimeout(connectWebSocket, 5000); // Retry after 5 seconds
     };
 
     ws.current.onerror = (error) => {
@@ -96,18 +98,17 @@ useEffect(() => {
     e.preventDefault();
     setIsSending(true);
     try {
-      const response = await fetch('https://modrost0-github-io.onrender.com/api/chat', {
+      const response = await fetch(`${baseUrl}/chat`, {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ sender: user?.username || 'anonymous', message: form,date: new Date().toISOString() }),
+        body: JSON.stringify({ content: form }),
       });
       const data = await response.json();
       if (response.ok) {
         setForm('');
-        console.log(user)
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         console.log('Message sent:', data);
       } else {

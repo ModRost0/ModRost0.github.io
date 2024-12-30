@@ -8,7 +8,7 @@ import Register from './auth/Register';
 import App from './App';
 import ProtectedRoute from './components/ProtectedRoute';
 import './AppWrapper.css';
-import { UserContext } from './context/UserContext';
+import { UserContext } from './context/UserContext.jsx';
 
 const AppWrapper = () => {
   let {user} = useContext(UserContext)
