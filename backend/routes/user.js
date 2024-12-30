@@ -37,7 +37,6 @@ router.route('/login')
         if (err) {
           return res.status(500).json({ success: false, message: err.message });
         }
-        req.session.user = { username: 'john_doe', role: 'admin' }; // Set session data
         console.log('Session:', req.session); // Log session data
         console.log('Set-Cookie:', res.getHeader('Set-Cookie')); // Log Set-Cookie header
       
