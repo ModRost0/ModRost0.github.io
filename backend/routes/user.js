@@ -21,25 +21,40 @@ router.route('/register')
       res.status(500).json({ success: false, message: error.message });
     }
   });
-
-router.route('/login')
+  router.route('/login')
   .post((req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
-      console.log('login', user);
       if (err) {
         return res.status(500).json({ success: false, message: err.message });
       }
       if (!user) {
         return res.status(401).json({ success: false, message: 'Invalid credentials' });
       }
+
+      // Log in the user manually
       req.logIn(user, (err) => {
         if (err) {
           return res.status(500).json({ success: false, message: err.message });
         }
-        console.log('Session after login:', req.session);
-        res.json({ success: true, user });
+
+        // Set a cookie to store session or token info
+        res.cookie('sessionID', req.sessionID, {
+          httpOnly: true, // Make the cookie HTTP only for security
+          secure: true, // Ensure cookies are only sent over HTTPS
+          sameSite: 'None', // Cross-origin cookies if needed
+          maxAge: 1209600000, // Cookie expiration (e.g., 14 days)
+        });
+
+        // Send a response to frontend
+        res.json({
+          success: true,
+          message: 'Logged in successfully',
+          user: {
+            username: user.username,
+            id: user._id,
+          },
+        });
       });
-      
     })(req, res, next);
   });
 

@@ -36,8 +36,7 @@ const store = mongoStore.create({
 });
 
 const sessionConfig = {
-  store,
-  name: 'session-real', // Custom session cookie name
+  store, // Custom session cookie name
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
