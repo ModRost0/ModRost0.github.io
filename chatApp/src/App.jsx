@@ -15,9 +15,10 @@ function App() {
   const ws = useRef(null);
   const messageEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
+  const environment = import.meta.env.MODE === 'production' ? 'https://modrost0-github-io.onrender.com/api/auth/validate-session' : 'http://localhost:3000/api/auth/validate-session';
 useEffect(() => {
   let checkAuth = async () => {
-        const response = await fetch('https://modrost0-github-io.onrender.com/api/auth/validate-session', {
+        const response = await fetch(environment, {
           method: 'GET',
           credentials: 'include', // Ensures cookies are sent with the request
         });
@@ -32,9 +33,10 @@ useEffect(() => {
       },[])
 
   useEffect(() => {
+    const environment = import.meta.env.MODE === 'production' ? 'https://modrost0-github-io.onrender.com/api/chat' : 'http://localhost:3000/api/chat';
     const fetchMessages = async () => {
       try {
-        const response = await fetch('https://modrost0-github-io.onrender.com/api/chat', {
+        const response = await fetch(environment, {
           method: 'GET',
           credentials: 'include',
         });
@@ -63,6 +65,7 @@ useEffect(() => {
   }, []);
 
   const connectWebSocket = () => {
+    const environment = import.meta.env.MODE === 'production' ? 'wss://modrost0-github-io.onrender.com' : 'ws://localhost:3000';
     if (ws.current) ws.current.close();
     ws.current = new WebSocket('wss://modrost0-github-io.onrender.com');
 
@@ -96,7 +99,8 @@ useEffect(() => {
     e.preventDefault();
     setIsSending(true);
     try {
-      const response = await fetch('https://modrost0-github-io.onrender.com/api/chat', {
+      const environment = import.meta.env.MODE === 'production' ? 'https://modrost0-github-io.onrender.com/api/chat' : 'http://localhost:3000/api/chat';
+      const response = await fetch(environment, {
         method: 'POST',
         credentials: 'include',
         headers: {
