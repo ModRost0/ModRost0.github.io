@@ -23,29 +23,6 @@ router.route('/register')
     });
 
 router.route('/login')
-<<<<<<< HEAD
-  .post((req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
-      if (err) {
-        return res.status(500).json({ success: false, message: err.message });
-      }
-      if (!user) {
-        return res.status(401).json({ success: false, message: 'Invalid credentials' });
-      }
-      req.logIn(user, (err) => {
-        if (err) {
-          return res.status(500).json({ success: false, message: err.message });
-        }
-        // Log Set-Cookie header  
-        // Send a response to frontend
-        res.json({
-          success: true,
-          user
-        });
-      });
-    })(req, res, next);
-  });
-=======
     .post((req, res, next) => {
         passport.authenticate('local', (err, user, info) => {
             console.log('login', user);
@@ -66,7 +43,6 @@ router.route('/login')
 
         })(req, res, next);
     });
->>>>>>> 1d77d5fe13bffebfe6fdcfbb090a529a5091c0d9
 
 router.post('/logout', isLoggedIn, (req, res, next) => {
     req.logout(err => {
