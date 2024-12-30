@@ -31,14 +31,14 @@ router.route('/login')
       if (!user) {
         return res.status(401).json({ success: false, message: 'Invalid credentials' });
       }
-
+      console.log('Session:', req.session); // Log session data
+      console.log('Set-Cookie:', res.getHeader('Set-Cookie'));
       // Log in the user manually
       req.logIn(user, (err) => {
         if (err) {
           return res.status(500).json({ success: false, message: err.message });
         }
-        console.log('Session:', req.session); // Log session data
-        console.log('Set-Cookie:', res.getHeader('Set-Cookie')); // Log Set-Cookie header
+        // Log Set-Cookie header
       
         res.send('Login successful');
       
