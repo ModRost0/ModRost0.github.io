@@ -8,30 +8,37 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
  const {setUser} = useContext(UserContext);
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch('https://modrost0-github-io.onrender.com/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-        credentials: 'include', // Ensure cookies are sent with the request
-      });
-      const data = await response.json();
-      if (response.ok) {
-        console.log('Login successful:', data);
-        setUser(data.user);
-        navigate('/home');
-      } else {
-        setErrorMessage(data.message);
-      }
-    } catch (error) {
-      setErrorMessage('Failed to login');
-      console.error('Error logging in:', error);
+ const handleLogin = async (e) => {
+  e.preventDefault();
+  if (!username || !password) {
+    setErrorMessage('Username and password are required');
+    return;
+  } // Start loading indicator
+  try {
+    const response = await fetch('https://modrost0-github-io.onrender.com/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      console.log('Login successful:', data);
+      setUser(data.user);
+      navigate('/home');
+    } else {
+      console.error('Login failed:', data);
+      setErrorMessage(data.message || 'Login failed. Please try again.');
     }
-  };
+  } catch (error) {
+    console.error('Error logging in:', error);
+    setErrorMessage('Unable to connect to the server. Please try again later.');
+  } finally { // Stop loading indicator
+  }
+};
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>

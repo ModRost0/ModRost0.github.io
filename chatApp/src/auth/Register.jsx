@@ -10,29 +10,37 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    if (!formData.username || !formData.password) {
+      setErrorMessage('Username and password are required');
+      return;
+    }
+  
+; // Start loading
     try {
       const response = await fetch('https://modrost0-github-io.onrender.com/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
+  
       const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
+  
       if (data.success) {
         navigate('/home');
       } else {
-        setErrorMessage(data.message);
+        setErrorMessage(data.message || 'Failed to register. Please try again.');
       }
     } catch (error) {
       setErrorMessage('An error occurred during registration.');
       console.error('Error:', error);
-    }
+    } 
   };
-
+  
   return (
     <Box className="register-container" sx={{ mt: 4 }}>
       <Typography variant="h4" align="center" gutterBottom>

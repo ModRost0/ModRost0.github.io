@@ -138,12 +138,8 @@ app.post(
   })
 );
 
-app.get("/api/auth/validate-session", (req, res) => {
-  if (req.isAuthenticated()) {
+app.get("/api/auth/validate-session", isLoggedIn,(req, res) => {
     res.json({ success: true, user: req.user });
-  } else {
-    res.json({ success: false });
-  }
 });
 
 app.get(

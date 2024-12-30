@@ -29,7 +29,7 @@ useEffect(() => {
           console.log('response',response)
         }}
         checkAuth();
-      },[user])
+      },[])
 
   useEffect(() => {
     const fetchMessages = async () => {

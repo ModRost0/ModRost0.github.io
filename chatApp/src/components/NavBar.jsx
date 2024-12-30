@@ -8,24 +8,6 @@ import Button from '@mui/material/Button';
 import { UserContext } from '../context/UserContext';
 const Navbar = () => {
   let {user} = useContext(UserContext);
-  const checkAuth = async () => {
-      const response = await fetch('https://modrost0-github-io.onrender.com/api/auth/validate-session', {
-        method: 'GET',
-        credentials: 'include', // Ensures cookies are sent with the request
-      });
-
-      if (response.ok) {
-        user = await response.json();
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-      }
-  
-  };
-
-  if (!user) {
-    checkAuth(); // Validate the session if user is not already set
-  } 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
