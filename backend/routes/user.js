@@ -35,10 +35,7 @@ router.route('/login')
         if (err) {
           return res.status(500).json({ success: false, message: err.message });
         }
-        // Log Set-Cookie header
-      
-        res.send('Login successful');
-      
+        // Log Set-Cookie header  
         // Send a response to frontend
         res.json({
           success: true,
