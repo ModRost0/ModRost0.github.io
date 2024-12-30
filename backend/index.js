@@ -82,17 +82,7 @@ passport.serializeUser((user, done) => {
     done(null, user.id);
 });
 
-passport.deserializeUser(async(id, done) => {
-    try {
-        console.log('Deserializing user with ID:', id);
-        const user = await User.findById(id);
-        console.log('User found during deserialization:', user);
-        done(null, user);
-    } catch (error) {
-        console.error('Error during deserialization:', error);
-        done(error, null);
-    }
-});
+passport.deserializeUser().then((id, done) => {console.log('Deserializing user:', id); User.findById(id, (err, user) => done(err, user));});
 
 // Middleware to Add User Info to Response Locals
 app.use((req, res, next) => {
