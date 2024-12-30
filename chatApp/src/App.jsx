@@ -15,6 +15,7 @@ function App() {
   const ws = useRef(null);
   const messageEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
+<<<<<<< HEAD
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -32,11 +33,34 @@ function App() {
     };
     checkAuth();
   }, [baseUrl, setUser]);
+=======
+  const environment = import.meta.env.MODE === 'production' ? 'https://modrost0-github-io.onrender.com/api/auth/validate-session' : 'http://localhost:3000/api/auth/validate-session';
+useEffect(() => {
+  let checkAuth = async () => {
+        const response = await fetch(environment, {
+          method: 'GET',
+          credentials: 'include', // Ensures cookies are sent with the request
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log('response',data)
+          setUser(data.user); // Update user state
+        } else {
+          console.log('response',response)
+        }}
+        checkAuth();
+      },[])
+>>>>>>> 1d77d5fe13bffebfe6fdcfbb090a529a5091c0d9
 
   useEffect(() => {
+    const environment = import.meta.env.MODE === 'production' ? 'https://modrost0-github-io.onrender.com/api/chat' : 'http://localhost:3000/api/chat';
     const fetchMessages = async () => {
       try {
+<<<<<<< HEAD
         const response = await fetch(`${baseUrl}/chat`, {
+=======
+        const response = await fetch(environment, {
+>>>>>>> 1d77d5fe13bffebfe6fdcfbb090a529a5091c0d9
           method: 'GET',
           credentials: 'include',
         });
@@ -65,6 +89,7 @@ function App() {
   }, [baseUrl]);
 
   const connectWebSocket = () => {
+    const environment = import.meta.env.MODE === 'production' ? 'wss://modrost0-github-io.onrender.com' : 'ws://localhost:3000';
     if (ws.current) ws.current.close();
     ws.current = new WebSocket(`wss://modrost0-github-io.onrender.com`);
 
@@ -98,7 +123,12 @@ function App() {
     e.preventDefault();
     setIsSending(true);
     try {
+<<<<<<< HEAD
       const response = await fetch(`${baseUrl}/chat`, {
+=======
+      const environment = import.meta.env.MODE === 'production' ? 'https://modrost0-github-io.onrender.com/api/chat' : 'http://localhost:3000/api/chat';
+      const response = await fetch(environment, {
+>>>>>>> 1d77d5fe13bffebfe6fdcfbb090a529a5091c0d9
         method: 'POST',
         credentials: 'include',
         headers: {

@@ -5,12 +5,14 @@ import { UserContext } from '../context/UserContext.jsx'; // Ensure you have a U
 const ProtectedRoute = ({ children }) => {
   const { user, setUser, isLoading, setIsLoading } = useContext(UserContext);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const environment = import.meta.env.MODE === 'production' ? 'https://modrost0-github-io.onrender.com/api/auth/validate-session' : 'http://localhost:3000/api/auth/validate-session';
+  
 
   useEffect(() => {
     const checkAuth = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch('https://modrost0-github-io.onrender.com/api/auth/validate-session', {
+        const response = await fetch(environment, {
           method: 'GET',
           credentials: 'include', // Ensures cookies are sent with the request
         });

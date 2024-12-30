@@ -8,6 +8,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
  const {setUser} = useContext(UserContext);
+   const environment = import.meta.env.MODE === 'production' ? 'https://modrost0-github-io.onrender.com/api/login' : 'http://localhost:3000/api/login';
  const handleLogin = async (e) => {
   e.preventDefault();
   if (!username || !password) {
@@ -15,7 +16,7 @@ const Login = () => {
     return;
   } // Start loading indicator
   try {
-    const response = await fetch('https://modrost0-github-io.onrender.com/api/login', {
+    const response = await fetch(environment, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
