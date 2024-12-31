@@ -60,7 +60,7 @@ function App() {
       try {
         const data = await event.data.text();
         const newMessage = JSON.parse(data);
-        setAllMessages((prev) => [newMessage,...prev, ]);
+        setAllMessages((prev) => [...prev,newMessage ]);
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         console.log('Received WebSocket message:', newMessage);
       } catch (error) {
