@@ -136,8 +136,8 @@ function App() {
           <div ref={messageEndRef} />
         </Box>
       </Box>
-      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', p: 2 }}>
-  <TextField
+  <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', p: 2 }}>
+   <TextField
     value={form}
     onChange={(e) => setForm(e.target.value)}
     fullWidth
@@ -151,7 +151,10 @@ function App() {
       },
     }}
   />
-</Box>
+        <Button type="submit" variant="contained" color="primary" disabled={isSending}>
+          {isSending ? <CircularProgress size={24} /> : 'Send'}
+        </Button>
+      </Box>
 
       {errorMessage && (
         <Box sx={{ padding: 2, backgroundColor: '#f44336', color: '#ffffff', borderRadius: 1 }}>
