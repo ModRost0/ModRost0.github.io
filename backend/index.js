@@ -50,6 +50,7 @@ const sessionConfig = {
     resave: false,
     saveUninitialized: false,
     cookie: {
+        httpOnly:true,
         secure: process.env.NODE_ENV === "production", // Secure only in production
         sameSite: "None", // Required for cross-origin cookies
         maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
