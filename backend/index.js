@@ -136,10 +136,11 @@ app.post(
 
 app.get("/api/auth/validate-session", isLoggedIn, (req, res) => {
     if (req.isAuthenticated()) {
-        return next();} else {
-    res.json({ success: false, user: req.user });}
-});
-
+        return next();
+    }else{
+        res.json({islogged:req.isAuthenticated()})
+    }
+})
 app.get(
     "/api/chat/older",
     isLoggedIn,
