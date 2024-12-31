@@ -91,15 +91,9 @@ passport.deserializeUser(async (id, done) => {
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(flash());
 
 
 // Middleware to Add User Info to Response Locals
-app.use((req, res, next) => {
-    res.locals.user = req.user;
-    res.locals.title = req.body.name || "AppsWhat";
-    next();
-});
 
 // Async Error Wrapper
 const catchAsync = (fn) => (req, res, next) => {
