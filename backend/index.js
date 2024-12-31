@@ -125,13 +125,16 @@ app.post(
 );
 
 app.get("/api/auth/validate-session", isLoggedIn, (req, res) => {
-    res.json({ success: true, user: req.user });
+    if (req.isAuthenticated()) {
+        return next();} else {
+    res.json({ success: true, user: req.user });}
 });
 
 app.get(
     "/api/chat/older",
     isLoggedIn,
     catchAsync(async(req, res) => {
+        r
         const { skip, limit } = req.query;
         const messages = await Message.find({}).sort({ createdAt: -1 }).skip(parseInt(skip)).limit(parseInt(limit));
         res.json(messages);
