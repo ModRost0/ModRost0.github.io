@@ -127,7 +127,7 @@ app.post(
 app.get("/api/auth/validate-session", isLoggedIn, (req, res) => {
     if (req.isAuthenticated()) {
         return next();} else {
-    res.json({ success: true, user: req.user });}
+    res.json({ success: false, user: req.user });}
 });
 
 app.get(
