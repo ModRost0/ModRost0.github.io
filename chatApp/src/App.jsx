@@ -60,7 +60,7 @@ function App() {
       try {
         const data = await event.data.text();
         const newMessage = JSON.parse(data);
-        setAllMessages((prev) => [...prev, newMessage]);
+        setAllMessages((prev) => [newMessage,...prev, ]);
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
         console.log('Received WebSocket message:', newMessage);
       } catch (error) {
@@ -82,14 +82,17 @@ function App() {
     e.preventDefault();
     setIsSending(true);
     try {
+      let message = { sender: user ? user.username : 'annonymous', message: form };
       const response = await fetch(`${baseUrl}/chat`, {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content: form }),
+        body: JSON.stringify(message),
       });
+      ws.current.send(JSON.stringify(message));
+      console.log('Message sent:', message);
       const data = await response.json();
       if (response.ok) {
         setForm('');
