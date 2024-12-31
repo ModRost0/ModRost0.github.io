@@ -15,9 +15,9 @@ const AppWrapper = () => {
   return (
     <div className="app-wrapper">
       {/* Video Background */}
-      <video autoPlay={true} loop className="background-video">
+      <video autoPlay loop className="background-video">
         <source src="/background.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
+        Your browser does not Support the video tag.
       </video>
       <NavBar />
       <Container maxWidth="lg" sx={{ paddingTop: 4, paddingBottom: 4 }}>
