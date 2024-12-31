@@ -71,23 +71,9 @@ store.on("update", (sessionId) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser((user, done) => {
-    console.log("Serializing user:", user);
-    done(null, user.id);
-});
-
-passport.deserializeUser(async (id, done) => {
-    try {
-        console.log("Deserializing user with ID:", id);
-        const user = await User.findById(id);
-        console.log("User found during deserialization:", user);
-        done(null, user);
-    } catch (error) {
-        console.error("Error during deserialization:", error);
-        done(error, null);
-    }
-});
+passport.use(new LocalStrategy(User.authenticate()))
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use(passport.initialize());
 app.use(passport.session());
