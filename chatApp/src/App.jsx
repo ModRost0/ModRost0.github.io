@@ -75,14 +75,25 @@ connectWebSocket();
     e.preventDefault();
     setIsSending(true);
     try {
-      if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-        ws.current.send(JSON.stringify({ content: form }));
+      let message = { sender: user ? user.username : 'annonymous', message: form };
+      const response = await fetch(`${baseUrl}/chat`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
+      });
+      ws.current.send(JSON.stringify(message));
+      console.log('Message sent:', message);
+      const data = await response.json();
+      if (response.ok) {
         setForm('');
         messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-        console.log('Message sent:', form);
+        console.log('Message sent:', data);
       } else {
-        setErrorMessage('WebSocket connection is not open');
-        console.error('WebSocket connection is not open');
+        setErrorMessage(data.error);
+        console.error('Failed to send message:', data.error);
       }
     } catch (error) {
       setErrorMessage('Failed to send message');
