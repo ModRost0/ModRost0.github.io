@@ -70,10 +70,6 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(flash());
-
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser((user, done) => {
     console.log("Serializing user:", user);
@@ -91,6 +87,11 @@ passport.deserializeUser(async (id, done) => {
         done(error, null);
     }
 });
+
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
 
 // Middleware to Add User Info to Response Locals
 app.use((req, res, next) => {
