@@ -7,7 +7,15 @@
   position: relative;
   width: 100%;
 }
-
+.cloudinary-vid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
 /* Video Background */
 .background-video {
   position: absolute;
