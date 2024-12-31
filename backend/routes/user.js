@@ -34,7 +34,7 @@ router.route('/login')
             }
             req.logIn(user, (err) => {
                 console.log("LOGIN SUCESSFUL, SESSION:", req.session);
-                res.cookie('connect.sid', req.sessionID, { httpOnly: true });
+                res.cookie('connect.sid', req.sessionID, { httpOnly: true ,secure:true, sameSite:'none'});
                 if (err) {
                     return res.status(500).json({ success: false, message: err.message });
                 }
