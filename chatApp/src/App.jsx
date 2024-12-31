@@ -106,7 +106,10 @@ useEffect(() => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content: form }),
+        body: JSON.stringify({ message: form,
+          sender: user.username,
+          date: new Date().toISOString()
+         }),
       });
       const data = await response.json();
       if (response.ok) {
