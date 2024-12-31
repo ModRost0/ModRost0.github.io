@@ -16,7 +16,7 @@ const AppWrapper = () => {
     <div className="app-wrapper">
       {/* Video Background */}
       <video autoPlay loop className="background-video">
-        <source src="/background.mp4" type="video/mp4" />
+        <source src="https://res.cloudinary.com/dritmjkxl/video/upload/v1735657604/eldenRingCinematics_-_Made_with_Clipchamp_1_lrqidl.mp4" type="video/mp4" />
         Your browser does not Support the video tag.
       </video>
       <NavBar />
