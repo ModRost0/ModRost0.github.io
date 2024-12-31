@@ -174,7 +174,7 @@ wsServer.on("connection", (ws) => {
 
         // Broadcast the message to all connected clients
         wsServer.clients.forEach((client) => {
-            if (client !== ws && client.readyState === WebSocket.OPEN) {
+            if (client.readyState === WebSocket.OPEN) {
                 client.send(message);
             }
         });
