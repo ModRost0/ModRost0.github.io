@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import { Box, Typography, TextField, Button, CircularProgress, Drawer, AppBar, Toolbar, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { UserContext } from './context/UserContext.jsx';
+import { UserContext } from './context/UserContext';
 import './App.css';
 
 function App() {
@@ -49,7 +49,6 @@ function App() {
   }, [baseUrl]);
 
   const connectWebSocket = () => {
-    const environment = import.meta.env.MODE === 'production' ? 'wss://modrost0-github-io.onrender.com' : 'ws://localhost:3000';
     if (ws.current) ws.current.close();
     ws.current = new WebSocket(`wss://modrost0-github-io.onrender.com`);
 
@@ -83,17 +82,13 @@ function App() {
     e.preventDefault();
     setIsSending(true);
     try {
-      const environment = import.meta.env.MODE === 'production' ? 'https://modrost0-github-io.onrender.com/api/chat' : 'http://localhost:3000/api/chat';
-      const response = await fetch(environment, {
+      const response = await fetch(`${baseUrl}/chat`, {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: form,
-          sender: user ? user.username : 'annonymous',
-          date: new Date().toISOString()
-         }),
+        body: JSON.stringify({ content: form }),
       });
       const data = await response.json();
       if (response.ok) {

@@ -38,25 +38,23 @@ const store = mongoStore.create({
 
 const sessionConfig = {
     store,
-    name: 'session-real', // Custom session cookie name
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
         secure: process.env.NODE_ENV === "production", // Secure only in production
-        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Adjust sameSite for local dev
+        sameSite: "None", // Required for cross-origin cookies
         maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
-    }
-
+    },
 };
 app.use(session(sessionConfig));
 
-store.on('create', (sessionId) => {
-    console.log('Session created:', sessionId);
+store.on("create", (sessionId) => {
+    console.log("Session created:", sessionId);
 });
 
-store.on('update', (sessionId) => {
-    console.log('Session updated:', sessionId);
+store.on("update", (sessionId) => {
+    console.log("Session updated:", sessionId);
 });
 
 // Middleware Setup
@@ -78,11 +76,22 @@ app.use(flash());
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser((user, done) => {
-    console.log('Serializing user:', user);
+    console.log("Serializing user:", user);
     done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {console.log('Deserializing user:', id);});
+passport.deserializeUser(async (id, done) => {
+    try {
+        console.log("Deserializing user with ID:", id);
+        const user = await User.findById(id);
+        console.log("User found during deserialization:", user);
+        done(null, user);
+    } catch (error) {
+        console.error("Error during deserialization:", error);
+        done(error, null);
+    }
+});
+
 // Middleware to Add User Info to Response Locals
 app.use((req, res, next) => {
     res.locals.user = req.user;
@@ -147,7 +156,7 @@ const wsServer = new WebSocketServer({
     server,
     verifyClient: (info, done) => {
         const origin = info.origin;
-        if (["https://chat-client-hazel.vercel.app", 'http://localhost:5173'].includes(origin)) {
+        if (["https://chat-client-hazel.vercel.app", "http://localhost:5173"].includes(origin)) {
             done(true);
         } else {
             console.log("Blocked WebSocket connection from:", origin);
