@@ -116,7 +116,7 @@ function App() {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' ,overFlowY:'auto'}}>
       <Drawer anchor="left" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         {/* Drawer content */}
       </Drawer>
