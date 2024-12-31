@@ -10,5 +10,14 @@
         "src": "/(.*)",
         "dest": "/"
       }
-    ]
+    ],{
+  "redirects": [
+    {
+      "source": "/:path*",
+      "destination": "/",
+      "statusCode": 200
+    }
+  ]
+}
+
 }
