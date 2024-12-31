@@ -21,6 +21,14 @@ const userRouter = require("./routes/user");
 const app = express();
 const port = process.env.PORT || 3000;
 const dbUrl = process.env.MONGODB_URL;
+app.use(
+    cors({
+        origin: ["https://chat-client-hazel.vercel.app", "http://localhost:5173"],
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+        credentials: true, // Allow cookies and credentials
+    })
+);
 
 // Database Connection
 mongoose
@@ -58,14 +66,6 @@ store.on("update", (sessionId) => {
 });
 
 // Middleware Setup
-app.use(
-    cors({
-        origin: ["https://chat-client-hazel.vercel.app", "http://localhost:5173"],
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-        credentials: true, // Allow cookies and credentials
-    })
-);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
