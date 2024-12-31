@@ -37,15 +37,8 @@ function App() {
         setLoadingOlderMessages(false);
       }
     };
-
+connectWebSocket();
     fetchMessages();
-    connectWebSocket();
-
-    return () => {
-      if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-        ws.current.close();
-      }
-    };
   }, [baseUrl]);
 
   const connectWebSocket = () => {
