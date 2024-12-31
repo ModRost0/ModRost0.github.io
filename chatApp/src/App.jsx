@@ -117,10 +117,7 @@ function App() {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' ,overflowY:'auto'}}>
-      <Drawer anchor="left" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-        {/* Drawer content */}
-      </Drawer>
-      <Box sx={{ flexGrow: 1, overflow: 'auto', p: 2 }} ref={messagesContainerRef}>
+      <Box sx={{ flexGrow: 1, overflow: 'auto', p: 2,zIndex:1 }} ref={messagesContainerRef}>
         {loadingOlderMessages && <CircularProgress />}
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
           {allMessages.map((message, index) => (
