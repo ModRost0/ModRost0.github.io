@@ -1,0 +1,11 @@
+[
+  {
+    "applyTo": "login",
+    "headers": [
+      {
+        "name": "header-name",
+        "value": "header value"
+      }
+    ]
+  }
+]
