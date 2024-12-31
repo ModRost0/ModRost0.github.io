@@ -16,22 +16,6 @@ function App() {
   const messageEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const environment = import.meta.env.MODE === 'production' ? 'https://modrost0-github-io.onrender.com/api/auth/validate-session' : 'http://localhost:3000/api/auth/validate-session';
-useEffect(() => {
-  let checkAuth = async () => {
-        const response = await fetch(environment, {
-          method: 'GET',
-          credentials: 'include', // Ensures cookies are sent with the request
-        });
-        if (response.ok) {
-          const data = await response.json();
-          console.log('response',data)
-          setUser(data.user); // Update user state
-        } else {
-          console.log('response',response)
-        }}
-        checkAuth();
-      },[])
-
   useEffect(() => {
     const environment = import.meta.env.MODE === 'production' ? 'https://modrost0-github-io.onrender.com/api/chat' : 'http://localhost:3000/api/chat';
     const fetchMessages = async () => {
