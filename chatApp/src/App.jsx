@@ -107,7 +107,7 @@ useEffect(() => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ message: form,
-          sender: user.username | 'annonymous',
+          sender: user ? user.username : 'annonymous',
           date: new Date().toISOString()
          }),
       });
