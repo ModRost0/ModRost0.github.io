@@ -37,13 +37,26 @@ function App() {
         setLoadingOlderMessages(false);
       }
     };
-connectWebSocket();
+
     fetchMessages();
+    connectWebSocket();
+
+    return () => {
+      if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+        ws.current.close();
+      }
+    };
   }, [baseUrl]);
+
+  useEffect(() => {
+    // Scroll to the bottom whenever allMessages changes
+    messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [allMessages]);
 
   const connectWebSocket = () => {
     if (ws.current) ws.current.close();
     ws.current = new WebSocket(`wss://modrost0-github-io.onrender.com`);
+    console.log('WebSocket connecting...');
 
     ws.current.onopen = () => {
       console.log('WebSocket connected');
@@ -53,8 +66,7 @@ connectWebSocket();
       try {
         const data = await event.data.text();
         const newMessage = JSON.parse(data);
-        setAllMessages((prev) => [...prev,newMessage ]);
-        messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        setAllMessages((prev) => [...prev, newMessage]);
         console.log('Received WebSocket message:', newMessage);
       } catch (error) {
         console.error('WebSocket message error:', error);
@@ -75,7 +87,7 @@ connectWebSocket();
     e.preventDefault();
     setIsSending(true);
     try {
-      let message = { sender: user ? user.username : 'annonymous', message: form };
+      let message = { sender: user ? user.username : 'anonymous', message: form };
       const response = await fetch(`${baseUrl}/chat`, {
         method: 'POST',
         credentials: 'include',
@@ -84,12 +96,12 @@ connectWebSocket();
         },
         body: JSON.stringify(message),
       });
-      ws.current.send(JSON.stringify(message));
-      console.log('Message sent:', message);
       const data = await response.json();
       if (response.ok) {
         setForm('');
-        messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+          ws.current.send(JSON.stringify(message));
+        }
         console.log('Message sent:', data);
       } else {
         setErrorMessage(data.error);
@@ -121,8 +133,8 @@ connectWebSocket();
               </Typography>
             </Box>
           ))}
+          <div ref={messageEndRef} />
         </Box>
-        <div ref={messageEndRef} />
       </Box>
       <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', p: 2 }}>
         <TextField
